@@ -1,45 +1,12 @@
-import React, {Component} from 'react';
+import React from 'react';
 
 import './todo-list-item.css';
 
-export default class TodoListItem extends Component {
-
-  // proposal class field instead constructor
-  // функция создается на самом объекте, а не на прототипе
-  // тоже самое что и:
-  // constructor() {
-  //   super();
-
-  //   this.state = {
-  //      done: false
-  //   };
-
-  //   this.onLabelClick = () => {
-  //     console.log(`click ${this.props.label}`);
-  //   }
-  // }
-  state = {
-    done: false,
-    important: false
-  };
-
-  onLabelClick = () => {
-    this.setState({
-      // setState принимает только те значения которые нужно изменить, а не весь state
-      done: true
-    });
-  };
-
-  onMarkImportant = () => {
-    this.setState({
-      important: true
-    });
-  };
-
-  render() {
-
-    const {label} = this.props;
-    const {done, important} = this.state;
+// деструктурируем свойства из объекта props, чтоб не писать this.props.onDeleted
+const TodoListItem = ({label, onDeleted,
+                        onToggleImportant,
+                        onToggleDone,
+                        important, done}) => {
 
     let classNames = 'todo-list-item';
 
@@ -55,21 +22,24 @@ export default class TodoListItem extends Component {
         <span className={classNames}>
           <span
               className="todo-list-item-label"
-              onClick={this.onLabelClick}>
+              onClick={onToggleDone}>
         {label}
           </span>
 
         <button type="button"
                 className="btn btn-outline-success btn-sm float-right"
-                onClick={this.onMarkImportant}>
+                onClick={onToggleImportant}>
           <i className="fas fa-exclamation"></i>
         </button>
 
         <button type="button"
-                className="btn btn-outline-danger btn-sm float-right">
+                className="btn btn-outline-danger btn-sm float-right"
+                // когда клик по кнопке, вызываем ф-ю, уоторую нам передал todo-list
+                onClick={onDeleted}>
           <i className="fas fa-trash-alt"></i>
         </button>
       </span>
     );
-  }
-}
+};
+
+export default TodoListItem;
